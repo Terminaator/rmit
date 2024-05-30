@@ -6,9 +6,9 @@ import {
   parseGetResponse,
   parsePostResponse,
 } from "@/actions/utils";
-import { GetResponse } from "@/actions/types";
+import { GetResponse, PostResponse } from "@/actions/types";
 
-export const post = async (path: string, body: any) => {
+export const post = async (path: string, body?: any): Promise<PostResponse> => {
   return await fetch(createApiUrl(path), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
