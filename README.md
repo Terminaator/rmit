@@ -22,6 +22,7 @@ docker-compose up --build
 * Add E2E tests for UI
 * Fix UI linter
 * Fix UI dependencies
+* Fix UI readme
 * Create E2E module for API
 * Transfer E2E tests into E2E module
 * Fix API dependencies
