@@ -13,11 +13,15 @@ export type DataFormProps = {
   // eslint-disable-next-line no-unused-vars
   action: (state: CreateFormState, form: FormData) => Promise<CreateFormState>;
   close: () => void;
-  fields: {
-    name: string;
-    label: string;
-    description: string;
-    type: ZodType;
-    defaultValue: string;
-  }[];
+  fields: DataFormFieldType[];
+};
+
+export type DataFormFieldType = {
+  name: string;
+  label: string;
+  description: string;
+  type: "INPUT" | "SELECT";
+  validation: ZodType;
+  defaultValue: string;
+  options?: readonly string[];
 };

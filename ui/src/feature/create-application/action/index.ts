@@ -17,6 +17,8 @@ export const createApplicationAction = async (
 ): Promise<CreateFormState> => {
   const parsed = parseForm(createApplicationFields, form);
 
+  console.log("createApplicationAction", parsed.data);
+
   if (!parsed.success) {
     return createActionResponse(state, ERROR, VALIDATION_ERROR);
   }

@@ -6,15 +6,24 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import React from "react";
 import { Control } from "react-hook-form";
+import { Input } from "@/components/ui/input";
 
 type DataFormFieldProps = {
   control: Control;
   name: string;
   label: string;
   description: string;
+  type: "INPUT" | "SELECT";
+  options?: readonly string[];
 };
 
 export const DataFormField = ({
@@ -22,6 +31,8 @@ export const DataFormField = ({
   name,
   label,
   description,
+  type,
+  options,
 }: DataFormFieldProps) => {
   return (
     <FormField
@@ -30,9 +41,33 @@ export const DataFormField = ({
       render={({ field }) => (
         <FormItem>
           <FormLabel>{label}</FormLabel>
-          <FormControl>
-            <Input {...field} />
-          </FormControl>
+          {type === "INPUT" && (
+            <FormControl>
+              <Input {...field} />
+            </FormControl>
+          )}
+
+          {type === "SELECT" && (
+            <Select
+              onValueChange={field.onChange}
+              value={field.value}
+              defaultValue={field.value}
+            >
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder="Vali väärtus!" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {options &&
+                  options.map((option) => (
+                    <SelectItem key={option} value={option.toString()}>
+                      {option}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
+          )}
           <FormDescription>{description}</FormDescription>
           <FormMessage />
         </FormItem>

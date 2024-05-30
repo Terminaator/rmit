@@ -1,5 +1,6 @@
 import {
   CreateFormState,
+  DataFormFieldType,
   ERROR_STATUS,
   SUCCESS_STATUS,
 } from "@/components/data/Form/type";
@@ -21,16 +22,13 @@ const parseData = (data: { [key: string]: any }) => {
   );
 };
 
-export const parseForm = (
-  fields: { name: any; type: any }[],
-  form: FormData,
-) => {
+export const parseForm = (fields: DataFormFieldType[], form: FormData) => {
   const data = Object.fromEntries(form);
   const parsed = createSchema(fields).safeParse(data);
 
   return {
     success: parsed.success,
-    data: parseData(parsed.data!),
+    data: parsed.success ? parseData(parsed.data!) : undefined,
   };
 };
 

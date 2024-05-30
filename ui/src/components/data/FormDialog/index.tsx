@@ -8,9 +8,11 @@ import {
 } from "@/components/ui/dialog";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ZodType } from "zod";
 import { DataForm } from "@/components/data/Form";
-import { CreateFormState } from "@/components/data/Form/type";
+import {
+  CreateFormState,
+  DataFormFieldType,
+} from "@/components/data/Form/type";
 
 type DataFormDialogProps = {
   title: string;
@@ -21,13 +23,7 @@ type DataFormDialogProps = {
       // eslint-disable-next-line no-unused-vars
       form: FormData,
     ) => Promise<CreateFormState>;
-    fields: {
-      name: string;
-      label: string;
-      description: string;
-      type: ZodType;
-      defaultValue: string;
-    }[];
+    fields: DataFormFieldType[];
   };
 };
 

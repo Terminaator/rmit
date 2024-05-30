@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { useFormState } from "react-dom";
@@ -7,10 +7,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createSchema } from "@/lib/utils";
 import { DataFormField } from "@/components/data/FormField";
-import { DataFormProps } from "@/components/data/Form/type";
+import { DataFormFieldType, DataFormProps } from "@/components/data/Form/type";
 import { UNSET_CREATE_FORM_STATE } from "@/components/data/Form/constant";
 
-const useDataForm = (fields: { name: any; type: any; defaultValue: any }[]) => {
+const useDataForm = (fields: DataFormFieldType[]) => {
   return useForm({
     resolver: zodResolver(createSchema(fields)),
     defaultValues: Object.fromEntries(
@@ -24,8 +24,6 @@ export const DataForm = ({ action, close, fields }: DataFormProps) => {
 
   const { toast } = useToast();
   const form = useDataForm(fields);
-
-  const ref = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     if (state.message) {
@@ -43,11 +41,18 @@ export const DataForm = ({ action, close, fields }: DataFormProps) => {
   return (
     <Form {...form}>
       <form
-        ref={ref}
         onSubmit={(evt) => {
           evt.preventDefault();
 
-          form.handleSubmit(() => setState(new FormData(ref.current!)))(evt);
+          form.handleSubmit((data) => {
+            const form = new FormData();
+
+            Object.keys(data).forEach((key) => {
+              form.append(key, data[key] ?? "");
+            });
+
+            setState(form);
+          })(evt);
         }}
       >
         {fields.map((field) => (
@@ -57,6 +62,8 @@ export const DataForm = ({ action, close, fields }: DataFormProps) => {
             name={field.name}
             label={field.label}
             description={field.description}
+            options={field.options}
+            type={field.type}
           />
         ))}
 

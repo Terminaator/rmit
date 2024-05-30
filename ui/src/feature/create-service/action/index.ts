@@ -17,6 +17,8 @@ export const createServiceAction = async (
 ): Promise<CreateFormState> => {
   const parsed = parseForm(createServiceFields, form);
 
+  console.log("createServiceAction", parsed.data);
+
   if (!parsed.success) {
     return createActionResponse(state, ERROR, VALIDATION_ERROR);
   }
