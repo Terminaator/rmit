@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.reactive.function.server.HandlerFilterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.web.server.ServerWebInputException;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -36,7 +37,8 @@ public class ErrorFilter {
     private static Mono<ServerResponse> fallback(Exception exp) {
         log.error("HANDLER fallback", exp);
 
-        if (exp instanceof ConstraintViolationException) {
+        if (exp instanceof ConstraintViolationException
+                || exp instanceof ServerWebInputException) {
             return createServerResponse(HttpStatus.BAD_REQUEST, exp);
         } else if (exp instanceof AppNotFoundException) {
             return createServerResponse(HttpStatus.NOT_FOUND, exp);
