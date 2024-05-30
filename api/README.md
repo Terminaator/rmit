@@ -33,3 +33,6 @@ docker run --rm -p 2375:2375 -v //var/run/docker.sock://var/run/docker.sock alpi
 * Docker
     * Build the Docker image: `docker build -t rmit-api .`
     * Run the Docker container: `docker run -p 8080:8080 rmit-api`
+
+## Swagger
+* http://localhost:8080/swagger-doc/swagger-ui.html
