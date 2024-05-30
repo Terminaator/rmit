@@ -25,6 +25,7 @@
         <jacoco.version>0.8.12</jacoco.version>
         <!-- dependency -->
         <jmolecules-bytebuddy.version>0.20.0</jmolecules-bytebuddy.version>
+        <springdoc-openapi.version>2.5.0</springdoc-openapi.version>
     </properties>
 
     <dependencyManagement>
@@ -46,15 +47,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <profiles>
-        <profile>
-            <id>build</id>
-            <properties>
-                <env>integration</env>
-            </properties>
-        </profile>
-    </profiles>
 
     <dependencies>
         <!-- spring -->
@@ -139,6 +131,14 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- springdoc-openapi -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+            <version>${springdoc-openapi.version}</version>
+        </dependency>
+
+
         <!-- other -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -149,14 +149,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <argLine>-XX:+EnableDynamicAgentLoading</argLine>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

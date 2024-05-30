@@ -15,7 +15,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.cr
 
 @Component
 @RequiredArgsConstructor
-public class CreateAppServiceHandler {
+public class CreateServiceHandler {
     private final ICreateServiceCommandHandler handler;
 
     public Mono<ServerResponse> handle(ServerRequest request) {
