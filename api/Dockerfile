@@ -1,12 +1,17 @@
 FROM eclipse-temurin:21 AS BUILDER
+RUN apt-get update && apt-get install -y dos2unix
 
 WORKDIR /app
 
-COPY .mvn .mvn
-COPY mvnw mvnw
-COPY pom.xml pom.xml
+COPY ./.mvn ./.mvn
+COPY ./mvnw ./mvnw
+COPY ./pom.xml ./pom.xml
 
-RUN chmod +x mvnw && \
+ # Converting the mvnw line endings during build (if you don’t change line endings of the mvnw file)
+RUN dos2unix ./mvnw
+RUN dos2unix ./.mvn/wrapper/maven-wrapper.properties
+
+RUN chmod +x ./mvnw && \
     ./mvnw -f pom.xml dependency:resolve-plugins dependency:resolve dependency:go-offline -B
 
 COPY src src
