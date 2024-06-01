@@ -24,7 +24,7 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN pnpm test && pnpm build
+RUN pnpm unit && pnpm build && pnpm e2e
 
 FROM base AS runner
 WORKDIR /app

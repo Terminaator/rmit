@@ -4,3 +4,5 @@ npm-debug.log
 README.md
 .next
 .git
+test-results
+playwright-report
