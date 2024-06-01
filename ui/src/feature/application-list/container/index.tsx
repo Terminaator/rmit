@@ -1,10 +1,13 @@
 import React from "react";
-import { Application } from "@/types";
+import { Application, Params } from "@/types";
 import { Suspense } from "react";
-import { ApplicationListProps } from "@/feature/application-list/type";
 import { getApplicationsAction } from "@/feature/application-list/action";
 import { DataTable } from "@/components/data/Table";
 import { DataSearch } from "@/components/data/Search";
+
+type ApplicationListProps = {
+  params: Params;
+};
 
 const table = {
   get: getApplicationsAction,

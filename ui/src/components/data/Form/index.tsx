@@ -3,27 +3,22 @@ import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { useFormState } from "react-dom";
 import { useToast } from "@/components/ui/use-toast";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { createSchema } from "@/lib/utils";
-import { DataFormField } from "@/components/data/FormField";
-import { DataFormFieldType, DataFormProps } from "@/components/data/Form/type";
-import { UNSET_CREATE_FORM_STATE } from "@/components/data/Form/constant";
+import { UseFormReturn } from "react-hook-form";
+import { DataFormField, DataFormFieldType } from "@/components/data/FormField";
+import { DataFormState } from "@/components/data/Form/type";
+import { UNSET_DATA_FORM_STATE } from "@/components/data/Form/constant";
 
-const useDataForm = (fields: DataFormFieldType[]) => {
-  return useForm({
-    resolver: zodResolver(createSchema(fields)),
-    defaultValues: Object.fromEntries(
-      fields.map(({ name, defaultValue }) => [name, defaultValue]),
-    ),
-  });
+type DataFormProps = {
+  // eslint-disable-next-line no-unused-vars
+  submit: (state: DataFormState, form: FormData) => Promise<DataFormState>;
+  form: UseFormReturn<any, any, any>;
+  fields: DataFormFieldType[];
 };
 
-export const DataForm = ({ action, close, fields }: DataFormProps) => {
-  const [state, setState] = useFormState(action, UNSET_CREATE_FORM_STATE);
+export const DataForm = ({ submit, form, fields }: DataFormProps) => {
+  const [state, setState] = useFormState(submit, UNSET_DATA_FORM_STATE);
 
   const { toast } = useToast();
-  const form = useDataForm(fields);
 
   useEffect(() => {
     if (state.message) {
@@ -32,11 +27,7 @@ export const DataForm = ({ action, close, fields }: DataFormProps) => {
         description: state.message,
       });
     }
-
-    if (state.status === "SUCCESS") {
-      return close();
-    }
-  }, [state, close, toast]);
+  }, [state, toast]);
 
   return (
     <Form {...form}>
@@ -48,7 +39,11 @@ export const DataForm = ({ action, close, fields }: DataFormProps) => {
             const form = new FormData();
 
             Object.keys(data).forEach((key) => {
-              form.append(key, data[key] ?? "");
+              const value = data[key];
+
+              if (value !== undefined && value !== null) {
+                form.append(key, value);
+              }
             });
 
             setState(form);

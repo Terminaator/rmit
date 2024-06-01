@@ -17,14 +17,17 @@ import React from "react";
 import { Control } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 
-type DataFormFieldProps = {
-  control: Control;
+export type DataFormFieldType = {
   name: string;
   label: string;
   description: string;
   type: "INPUT" | "SELECT";
   options?: readonly string[];
 };
+
+type DataFormFieldProps = {
+  control: Control;
+} & DataFormFieldType;
 
 export const DataFormField = ({
   control,

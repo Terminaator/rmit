@@ -1,10 +1,13 @@
 import React from "react";
-import { Service } from "@/types";
+import { Params, Service } from "@/types";
 import { Suspense } from "react";
-import { ServiceListProps } from "@/feature/service-list/type";
 import { getServicesAction } from "@/feature/service-list/action";
 import { DataSearch } from "@/components/data/Search";
 import { DataTable } from "@/components/data/Table";
+
+type ServiceListProps = {
+  params: Params;
+};
 
 const table = {
   get: getServicesAction,

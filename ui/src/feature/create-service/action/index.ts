@@ -1,21 +1,44 @@
 "use server";
 
 import { SERVICE_CREATED } from "@/feature/create-service/action/constant";
-import { createServiceFields } from "@/feature/create-service/schema";
-import { CreateFormState } from "@/components/data/Form/type";
 import {
-  createActionResponse,
-  parseForm,
-} from "@/feature/create-service/action/util";
+  ERROR_STATUS,
+  DataFormState,
+  SUCCESS_STATUS,
+} from "@/components/data/Form/type";
 import { ERROR, SUCCESS } from "@/components/data/Form/constant";
 import { VALIDATION_ERROR } from "@/actions/constants";
 import { post } from "@/actions";
+import { createServiceSchema } from "@/feature/create-service/schema";
+import { revalidatePath } from "next/cache";
 
-export const createServiceAction = async (
-  state: CreateFormState,
+const parseForm = (form: FormData) => {
+  const data = Object.fromEntries(form);
+  const parsed = createServiceSchema.safeParse(data);
+
+  return {
+    success: parsed.success,
+    data: parsed.success ? parsed.data : undefined,
+  };
+};
+
+const createActionResponse = (
+  state: DataFormState,
+  status: ERROR_STATUS | SUCCESS_STATUS,
+  message: string,
+): DataFormState => {
+  return {
+    ...state,
+    status: status,
+    message: message,
+  };
+};
+
+export const createServiceActionWithoutRevalidatePath = async (
+  state: DataFormState,
   form: FormData,
-): Promise<CreateFormState> => {
-  const parsed = parseForm(createServiceFields, form);
+): Promise<DataFormState> => {
+  const parsed = parseForm(form);
 
   console.log("createServiceAction", parsed.data);
 
@@ -29,5 +52,18 @@ export const createServiceAction = async (
     return createActionResponse(state, ERROR, response.error!);
   }
 
-  return createActionResponse(state, SUCCESS, SERVICE_CREATED, "/service");
+  return createActionResponse(state, SUCCESS, SERVICE_CREATED);
+};
+
+export const createServiceAction = async (
+  state: DataFormState,
+  form: FormData,
+): Promise<DataFormState> => {
+  const response = await createServiceActionWithoutRevalidatePath(state, form);
+
+  if (response.status === SUCCESS) {
+    revalidatePath("/service");
+  }
+
+  return response;
 };
