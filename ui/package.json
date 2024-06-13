@@ -48,6 +48,6 @@
     "vitest": "^1.6.0"
   },
   "prettier": {
-    "endOfLine": "crlf"
+    "endOfLine": "auto"
   }
 }
